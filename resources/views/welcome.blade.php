@@ -29,7 +29,7 @@
 </head>
 <body class="bg-gray-900 text-white">
 
-    <div class="flex items-center justify-between h-screen px-8">
+    <div class="flex items-center justify-between h-screen px-8  mx-10">
         <!-- Bagian kiri: logo chart naik dan teks dengan animasi typing -->
         <div class="flex items-center space-x-4">
             <!-- Logo chart naik (gunakan SVG) -->
@@ -39,11 +39,36 @@
             <h1 class="text-4xl font-bold text-green-500 typing">Rata - rata valuta Currency (USD, GBP, AUD, HKD) 2016</h1>
         </div>
 
-        <!-- Tombol Login dan Register di bagian kanan -->
-        <div class="flex flex-col items-center space-y-6">
-            <a href="{{ route('login') }}" class="flex justify-center items-center py-5 text-xl bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-all w-full">Login</a>
-            <a href="{{ route('register') }}" class="px-10 py-5 text-xl bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-600 transition-all w-full">Register</a>
-        </div>
+        <!-- Tombol Login dan Register -->
+        @if (Route::has('login'))
+            <div class="flex flex-col items-center space-y-6">
+                @auth
+                    <a
+                        href="{{ url('/dashboard') }}"
+                        class="flex justify-center items-center py-5 px-5 text-xl bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-all w-full ring-1 ring-transparent focus:outline-none focus-visible:ring-[#FF2D20]"
+                    >
+                        Dashboard
+                    </a>
+                @else
+                    <a
+                        href="{{ route('login') }}"
+                        class="flex justify-center items-center py-5 text-xl bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-all w-full ring-1 ring-transparent focus:outline-none focus-visible:ring-[#FF2D20]"
+                    >
+                        Login
+                    </a>
+
+                    @if (Route::has('register'))
+                        <a
+                            href="{{ route('register') }}"
+                            class="px-10 py-5 text-xl bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-600 transition-all w-full ring-1 ring-transparent focus:outline-none focus-visible:ring-[#FF2D20]"
+                        >
+                            Register
+                        </a>
+                    @endif
+                @endauth
+            </div>
+        @endif
+
     </div>
 
 </body>
