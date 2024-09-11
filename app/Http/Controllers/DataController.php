@@ -23,6 +23,77 @@ class datacontroller extends Controller
         return view('dashboard', compact('jualData','beliData'));
     }
 
+    public function jualan(Request $request)
+    {
+
+        $query = jual::query();
+
+        // Apply filters if they exist
+        if ($request->has('province') && $request->province != '') {
+            $query->where('Province', $request->province);
+        }
+
+        if ($request->has('currency') && $request->currency != '') {
+            $query->where('Currency', $request->currency);
+        }
+
+        if ($request->has('month') && $request->month != '') {
+            $query->where('Month', $request->month);
+        }
+
+        // Fetch provinces for the filter
+        $provinces = [
+            "Nanggroe Aceh Darussalam", "Sumatera Utara", "Sumatera Barat", "Riau", "Jambi",
+            "Sumatera Selatan", "Bengkulu", "Lampung", "Bangka Belitung", "Kepulauan Riau",
+            "DKI Jakarta", "Jawa Barat", "Jawa Tengah", "DI. Yogyakarta", "Jawa Timur",
+            "Banten", "Bali", "Nusa Tenggara Barat", "Nusa Tenggara Timur", "Kalimantan Barat",
+            "Kalimantan Tengah", "Kalimantan Selatan", "Kalimantan Timur", "Kalimantan Utara",
+            "Sulawesi Utara", "Sulawesi Tengah", "Sulawesi Selatan", "Sulawesi Tenggara",
+            "Gorontalo", "Sulawesi Barat", "Maluku", "Maluku Utara", "Papua", "Papua Barat"
+        ];
+
+        // Paginate the results
+        $dataJual = $query->paginate(20)->appends($request->except('page')); // Keep query parameters in pagination
+
+        return view('datajual', compact('dataJual', 'provinces')); // Pass provinces to the view
+
+    }
+
+    public function belii(Request $request)
+    {
+        $query = Beli::query();
+
+        // Apply filters if they exist
+        if ($request->has('province') && $request->province != '') {
+            $query->where('Province', $request->province);
+        }
+
+        if ($request->has('currency') && $request->currency != '') {
+            $query->where('Currency', $request->currency);
+        }
+
+        if ($request->has('month') && $request->month != '') {
+            $query->where('Month', $request->month);
+        }
+
+        // Fetch provinces for the filter
+        $provinces = [
+            "Nanggroe Aceh Darussalam", "Sumatera Utara", "Sumatera Barat", "Riau", "Jambi",
+            "Sumatera Selatan", "Bengkulu", "Lampung", "Bangka Belitung", "Kepulauan Riau",
+            "DKI Jakarta", "Jawa Barat", "Jawa Tengah", "DI. Yogyakarta", "Jawa Timur",
+            "Banten", "Bali", "Nusa Tenggara Barat", "Nusa Tenggara Timur", "Kalimantan Barat",
+            "Kalimantan Tengah", "Kalimantan Selatan", "Kalimantan Timur", "Kalimantan Utara",
+            "Sulawesi Utara", "Sulawesi Tengah", "Sulawesi Selatan", "Sulawesi Tenggara",
+            "Gorontalo", "Sulawesi Barat", "Maluku", "Maluku Utara", "Papua", "Papua Barat"
+        ];
+
+        // Paginate the results
+        $dataBeli = $query->paginate(20)->appends($request->except('page')); // Keep query parameters in pagination
+
+        return view('databeli', compact('dataBeli', 'provinces')); // Pass provinces to the view
+    }
+
+
     public function getData(Request $request)
     {  
 
@@ -74,7 +145,6 @@ class datacontroller extends Controller
         ];
         return response()->json($provinces);
     }
-
     
     public function getBarChartData(Request $request)
     {

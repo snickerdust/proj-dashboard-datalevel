@@ -20,6 +20,9 @@ Route::get('/chart-data', [DataController::class, 'getData']);
 Route::get('/provinces', [DataController::class, 'getProvinces']);
 Route::get('/chart-data-bar', [DataController::class, 'getBarChartData']);
 Route::get('/treemap-data', [DataController::class, 'getTreemapData']);
+Route::get('/datajual', [DataController::class, 'jualan'])->name('datajual');
+Route::get('/databeli', [DataController::class, 'belii'])->name('databeli');
+
 
 
 // Route::get('/dataset', [DataController::class, 'index']);
