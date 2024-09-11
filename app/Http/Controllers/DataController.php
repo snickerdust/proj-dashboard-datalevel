@@ -24,7 +24,8 @@ class datacontroller extends Controller
     }
 
     public function getData(Request $request)
-    {
+    {  
+
         $table = $request->input('table');
         $province = $request->input('province');
         $currency = $request->input('currency');
@@ -57,7 +58,7 @@ class datacontroller extends Controller
             'value' => $value
         ]);
     }
-    
+
     public function getProvinces()
     {
         $provinces = [
@@ -73,6 +74,7 @@ class datacontroller extends Controller
         ];
         return response()->json($provinces);
     }
+
     
     public function getBarChartData(Request $request)
     {
@@ -146,11 +148,7 @@ class datacontroller extends Controller
         }
 
         // Menambahkan kategori 'Jual' dan 'Beli'
-        // $labels = array_merge($labels, array_map(fn($label) => $label . ' - Jual', $labels));
-        // $labels = array_merge($labels, array_map(fn($label) => $label . ' - Beli', $labels));
         $parents = array_merge($parents, $labels); // Sesuaikan parent
-        // $values = array_merge($values, $values); // Menyalin nilai untuk 'Jual'
-        // $values = array_merge($values, $values); // Menyalin nilai untuk 'Beli'
 
         return response()->json([
             'labels' => $labels,

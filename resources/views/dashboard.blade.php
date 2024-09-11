@@ -10,16 +10,16 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-black-900 dark:text-black-100">
                     <div>
-                        <label for="currency-select">Currency:</label>
-                        <select id="currency-select">
+                        <label for="currency-select-treemap">Currency:</label>
+                        <select id="currency-select-treemap">
                             <option value="usd">USD</option>
                             <option value="hkd">HKD</option>
                             <option value="aud">AUD</option>
                             <option value="gbp">GBP</option>
                         </select>
 
-                        <label for="table-select">Table:</label>
-                        <select id="table-select">
+                        <label for="table-select-treemap">Table:</label>
+                        <select id="table-select-treemap">
                             <option value="jual">Jual</option>
                             <option value="beli">Beli</option>
                         </select>
@@ -30,8 +30,8 @@
                     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            var data = [];
-                            var layout = {
+                            var treemapData = [];
+                            var treemapLayout = {
                                 title: "Treemap Rata-rata Value per Provinsi",
                                 treemapcolorway: ['#636efa', '#ef553b'],
                                 width: 900,
@@ -39,12 +39,12 @@
                                 margin: {t: 50, l: 25, r: 25, b: 25}
                             };
 
-                            async function fetchChartData(table, currency) {
+                            async function fetchTreemapData(table, currency) {
                                 const response = await fetch(`/treemap-data?table=${table}&currency=${currency}`);
                                 return await response.json();
                             }
 
-                            function updateChart(data) {
+                            function updateTreemap(data) {
                                 var trace = {
                                     type: "treemap",
                                     labels: data.labels,
@@ -58,29 +58,29 @@
                                     pathbar: {visible: false}
                                 };
 
-                                Plotly.newPlot('treemap', [trace], layout);
+                                Plotly.newPlot('treemap', [trace], treemapLayout);
                             }
 
-                            async function updateData() {
-                                const table = document.getElementById('table-select').value;
-                                const currency = document.getElementById('currency-select').value;
+                            async function updateTreemapData() {
+                                const table = document.getElementById('table-select-treemap').value;
+                                const currency = document.getElementById('currency-select-treemap').value;
 
-                                const data = await fetchChartData(table, currency);
-                                updateChart(data);
+                                const data = await fetchTreemapData(table, currency);
+                                updateTreemap(data);
                             }
 
-                            document.getElementById('table-select').addEventListener('change', updateData);
-                            document.getElementById('currency-select').addEventListener('change', updateData);
+                            document.getElementById('table-select-treemap').addEventListener('change', updateTreemapData);
+                            document.getElementById('currency-select-treemap').addEventListener('change', updateTreemapData);
 
                             // Initial data load
-                            updateData();
+                            updateTreemapData();
                         });
                     </script>
                 </div>
                 <div class="p-6 text-black-900 dark:text-black-100">
                     <div>
-                        <label for="month-select">Month:</label>
-                        <select id="month-select">
+                        <label for="month-select-bar">Month:</label>
+                        <select id="month-select-bar">
                             <option value="Januari">Januari</option>
                             <option value="Februari">Februari</option>
                             <option value="Maret">Maret</option>
@@ -114,20 +114,20 @@
 
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            var ctx = document.getElementById('valueBarChart').getContext('2d');
+                            var ctxBarChart = document.getElementById('valueBarChart').getContext('2d');
                             var valueBarChart = null;
 
-                            async function fetchChartData(table, month, currency) {
+                            async function fetchBarChartData(table, month, currency) {
                                 const response = await fetch(`/chart-data-bar?table=${table}&month=${month}&currency=${currency}`);
                                 return await response.json();
                             }
 
-                            function updateChart(data) {
+                            function updateBarChart(data) {
                                 if (valueBarChart) {
                                     valueBarChart.destroy();
                                 }
 
-                                valueBarChart = new Chart(ctx, {
+                                valueBarChart = new Chart(ctxBarChart, {
                                     type: 'bar',
                                     data: {
                                         labels: data.provinces,
@@ -155,60 +155,60 @@
                                 });
                             }
 
-                            async function updateData() {
+                            async function updateBarChartData() {
                                 const table = document.getElementById('table-select-bar').value;
-                                const month = document.getElementById('month-select').value;
+                                const month = document.getElementById('month-select-bar').value;
                                 const currency = document.getElementById('currency-select-bar').value;
 
-                                const data = await fetchChartData(table, month, currency);
-                                updateChart(data);
+                                const data = await fetchBarChartData(table, month, currency);
+                                updateBarChart(data);
                             }
 
-                            document.getElementById('table-select-bar').addEventListener('change', updateData);
-                            document.getElementById('month-select').addEventListener('change', updateData);
-                            document.getElementById('currency-select-bar').addEventListener('change', updateData);
+                            document.getElementById('table-select-bar').addEventListener('change', updateBarChartData);
+                            document.getElementById('month-select-bar').addEventListener('change', updateBarChartData);
+                            document.getElementById('currency-select-bar').addEventListener('change', updateBarChartData);
 
                             // Initial data load
-                            updateData();
+                            updateBarChartData();
                         });
                     </script>
                 </div>
 
                 <div class="p-6 text-black-900 dark:text-black-100">
-                    <select id="table-select">
+                    <select id="table-select-line">
                         <option value="jual">Jual</option>
                         <option value="beli">Beli</option>
                     </select>
                     
-                    <select id="province-select">
+                    <select id="province-select-line">
                         <!-- Populate dynamically -->
                     </select>
                     
-                    <select id="currency-select">
-                        <option value="USD">USD</option>
-                        <option value="HKD">HKD</option>
-                        <option value="AUD">AUD</option>
-                        <option value="GBP">GBP</option>
+                    <select id="currency-select-line">
+                        <option value="usd">USD</option>
+                        <option value="hkd">HKD</option>
+                        <option value="aud">AUD</option>
+                        <option value="gbp">GBP</option>
                     </select>
                     
                     <canvas id="biRateChart"></canvas>
 
                     <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            let ctx = document.getElementById('biRateChart').getContext('2d');
+                        document.addEventListener('DOMContentLoaded', async function() {
+                            let ctxLineChart = document.getElementById('biRateChart').getContext('2d');
                             let biRateChart = null;
 
-                            async function fetchChartData(table, province, currency) {
+                            async function fetchLineChartData(table, province, currency) {
                                 const response = await fetch(`/chart-data?table=${table}&province=${province}&currency=${currency}`);
                                 return await response.json();
                             }
 
-                            function updateChart(data) {
+                            function updateLineChart(data) {
                                 if (biRateChart) {
                                     biRateChart.destroy();
                                 }
 
-                                biRateChart = new Chart(ctx, {
+                                biRateChart = new Chart(ctxLineChart, {
                                     type: 'line',
                                     data: {
                                         labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
@@ -255,29 +255,17 @@
                                 });
                             }
 
-                            async function updateData() {
-                                const table = document.getElementById('table-select').value;
-                                const province = document.getElementById('province-select').value;
-                                const currency = document.getElementById('currency-select').value;
+                            async function updateLineChartData() {
+                                const table = document.getElementById('table-select-line').value;
+                                const province = document.getElementById('province-select-line').value;
+                                const currency = document.getElementById('currency-select-line').value;
 
-                                const data = await fetchChartData(table, province, currency);
-                                updateChart(data);
+                                const data = await fetchLineChartData(table, province, currency);
+                                updateLineChart(data);
                             }
 
-                            document.getElementById('table-select').addEventListener('change', updateData);
-                            document.getElementById('province-select').addEventListener('change', updateData);
-                            document.getElementById('currency-select').addEventListener('change', updateData);
-
-                            // // Initial data load with default table 'beli'
-                            // document.getElementById('table-select').value = 'beli';
-                            updateData();
-                        });
-                    </script>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', async function() {
-                            const provinceSelect = document.getElementById('province-select');
-
                             // Fetch provinces dynamically
+                            const provinceSelectLine = document.getElementById('province-select-line');
                             const response = await fetch('/provinces');
                             const provinces = await response.json();
 
@@ -285,23 +273,26 @@
                                 let option = document.createElement('option');
                                 option.value = province;
                                 option.text = province;
-                                provinceSelect.appendChild(option);
+                                provinceSelectLine.appendChild(option);
                             });
 
+                            // Event listeners for all dropdowns
+                            document.getElementById('table-select-line').addEventListener('change', updateLineChartData);
+                            document.getElementById('province-select-line').addEventListener('change', updateLineChartData);
+                            document.getElementById('currency-select-line').addEventListener('change', updateLineChartData);
+
                             // Initial data load
-                            updateData();
+                            updateLineChartData();
                         });
                     </script>
-
                 </div>
+
             </div>
         </div>
     </div>
 
     
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    
+
 </x-app-layout>
